@@ -15,7 +15,6 @@ from selenium.webdriver.chrome.service import Service
 def post_to_tistory(username, password, blog_name, title_text, content_text):
 
     # 드라이버 실행
-    service = Service(ChromeDriverManager().install())
     options = webdriver.ChromeOptions()
 
     options.add_argument("--headless=new")
@@ -26,7 +25,7 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
     options.add_argument(
         "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36")
 
-
+    service = Service("/usr/bin/chromedriver")  # ✅ Dockerfile로 설치된 경로 직접 지정
     driver = webdriver.Chrome(service=service, options=options)
 
 
