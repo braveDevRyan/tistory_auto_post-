@@ -1,0 +1,8 @@
+Flask
+python-dotenv
+pyperclip
+selenium
+webdriver-manager
+functions-framework
+requests
+gunicorn
