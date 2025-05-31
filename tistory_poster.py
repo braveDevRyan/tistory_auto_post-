@@ -118,21 +118,37 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
         code_area.click()
         time.sleep(1)
 
-        driver.execute_script("""
-            // CodeMirror에 값 설정
-            const editor = document.querySelector('.CodeMirror').CodeMirror;
-            editor.setValue(arguments[0]);
-            editor.refresh();
-            editor.save();
+        # 12. Headless 여부 체크
+        is_headless = driver.execute_script("return navigator.webdriver")
+        print(f"🧐 Headless Mode: {is_headless}")
 
-            // 숨겨진 textarea 업데이트 + React에 change 이벤트 알림
-            const textarea = document.querySelector('.ReactCodemirror textarea');
-            if (textarea) {
-                textarea.value = arguments[0];  // 텍스트 강제 설정
-                const event = new Event('input', { bubbles: true });
-                textarea.dispatchEvent(event); // React에 알림
-            }
-        """, fixed_text)
+        # 13. 분기
+        if is_headless:
+            print("⌨️ Headless 모드: send_keys 타이핑으로 입력")
+            actions = ActionChains(driver)
+            actions.move_to_element(code_area).click()
+
+            # 텍스트를 10글자씩 쪼개서 사람처럼 입력
+            for chunk in [fixed_text[i:i + 10] for i in range(0, len(fixed_text), 10)]:
+                actions.send_keys(chunk)
+                actions.pause(0.2)
+            actions.perform()
+        else:
+            print("🖥️ 일반 모드: JS로 CodeMirror + textarea 세팅")
+            driver.execute_script("""
+                const editor = document.querySelector('.CodeMirror').CodeMirror;
+                editor.setValue(arguments[0]);
+                editor.refresh();
+                editor.save();
+
+                // 숨겨진 textarea 업데이트 + React에 change 이벤트 알림
+                const textarea = document.querySelector('.ReactCodemirror textarea');
+                if (textarea) {
+                    textarea.value = arguments[0];
+                    const event = new Event('input', { bubbles: true });
+                    textarea.dispatchEvent(event);
+                }
+            """, fixed_text)
 
         time.sleep(3)
 
