@@ -1,3 +1,4 @@
+import logging
 import os
 from flask_cors import CORS
 from flask import Flask, jsonify, request, send_file
@@ -8,6 +9,15 @@ CORS(app)  # 🔥 모든 도메인 허용
 
 @app.route("/", methods=["POST"])
 def post_tistory():
+    # 콘솔에 출력할 기본 설정
+    logging.basicConfig(level=logging.INFO)
+
+    # 로거 가져오기
+    logger = logging.getLogger(__name__)
+
+    logger.info(f"🛬 Headers: {request.headers}")
+    logger.info(f"🛬 Raw Body: {request.data}")
+
     data = request.get_json()
     if not data or "title" not in data or "content" not in data:
         return jsonify({"status":"error","message":"title과 content를 모두 보내주세요."}), 400
