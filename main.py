@@ -1,6 +1,6 @@
 import os
 
-import CORS as CORS
+from flask_cors import CORS
 from flask import Flask, jsonify, request, send_file
 from tistory_poster import post_to_tistory
 
