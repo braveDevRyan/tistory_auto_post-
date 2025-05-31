@@ -64,17 +64,21 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
         login_button.click()
         time.sleep(5)
 
-        # 4. 글관리 페이지로 이동
-        post_list_url = f"https://{blog_name}.tistory.com/manage/posts/post"
-        driver.get(post_list_url)
-        time.sleep(2)
+        write_button = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "a.link_tab"))
+        )
+
+        # # 4. 글관리 페이지로 이동
+        # post_list_url = f"https://{blog_name}.tistory.com/manage/"
+        # driver.get(post_list_url)
+        # time.sleep(2)
 
 
 
         # 6. 글쓰기 버튼 클릭
-        write_button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, "link_write"))
-        )
+        # write_button = WebDriverWait(driver, 10).until(
+        #     EC.element_to_be_clickable((By.CLASS_NAME, "link_write"))
+        # )
         write_button.click()
         time.sleep(2)
 
