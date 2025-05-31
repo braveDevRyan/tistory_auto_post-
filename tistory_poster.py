@@ -22,9 +22,11 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")
     options.add_argument("--window-size=1920,1080")
-    options.add_argument("--start-maximized")  # <<< 이거도 추가
+    options.add_argument("--start-maximized")         # <<< 이거도 추가
     options.add_argument(
-        "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36")
+        "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
+    )
+    options.add_argument("--disable-blink-features=AutomationControlled")
 
     service = Service("/usr/local/bin/chromedriver-linux64/chromedriver")
     driver = webdriver.Chrome(service=service, options=options)
@@ -64,6 +66,11 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
         driver.get(post_list_url)
         time.sleep(2)
 
+        driver.get("https://tistory.com/editor")  # 여긴 네가 열려는 주소
+        WebDriverWait(driver, 30).until(
+            lambda driver: driver.execute_script('return document.readyState') == 'complete'
+        )
+
         # # 6. 글쓰기 버튼 클릭
         # write_button = WebDriverWait(driver, 10).until(
         #     EC.element_to_be_clickable((By.CLASS_NAME, "link_write"))
@@ -76,7 +83,7 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
         time.sleep(2)
 
         # 7. 제목 입력
-        title_input = WebDriverWait(driver, 10).until(
+        title_input = WebDriverWait(driver, 30).until(
             EC.presence_of_element_located((By.ID, "post-title-inp"))
         )
         title_input.clear()
