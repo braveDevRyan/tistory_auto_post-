@@ -119,11 +119,19 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
         time.sleep(1)
 
         driver.execute_script("""
+            // CodeMirror에 값 설정
             const editor = document.querySelector('.CodeMirror').CodeMirror;
             editor.setValue(arguments[0]);
             editor.refresh();
-            editor.save();  // 🔥 반드시!
-            editor.getInputField().dispatchEvent(new Event('change', { bubbles: true })); // 🔥 반드시!
+            editor.save();
+
+            // 숨겨진 textarea 업데이트 + React에 change 이벤트 알림
+            const textarea = document.querySelector('.ReactCodemirror textarea');
+            if (textarea) {
+                textarea.value = arguments[0];  // 텍스트 강제 설정
+                const event = new Event('input', { bubbles: true });
+                textarea.dispatchEvent(event); // React에 알림
+            }
         """, fixed_text)
 
         time.sleep(3)
