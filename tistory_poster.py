@@ -151,11 +151,14 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
         return "Post Successful"
 
     except Exception as e:
+        driver.save_screenshot('screenshot.png')
+
         print("❌ 오류 발생:", e)
         traceback.print_exc()  # 전체 에러 스택 출력
         return str(e)
 
     finally:
+        driver.save_screenshot('screenshot.png')
         driver.quit()
 
 
