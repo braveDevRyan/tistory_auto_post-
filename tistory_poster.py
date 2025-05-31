@@ -1,3 +1,4 @@
+import logging
 import traceback
 
 import pyperclip
@@ -13,6 +14,11 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 
+# 콘솔에 출력할 기본 설정
+logging.basicConfig(level=logging.INFO)
+
+# 로거 가져오기
+logger = logging.getLogger(__name__)
 
 def post_to_tistory(username, password, blog_name, title_text, content_text):
     # 드라이버 실행
@@ -120,11 +126,11 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
 
         # 11. Headless 여부 체크
         is_headless = driver.execute_script("return navigator.webdriver")
-        print(f"🧐 Headless Mode: {is_headless}")
+        logger.info(f"🧐 Headless Mode: {is_headless}")
 
         # 12. 분기
         if is_headless:
-            print("⌨️ Headless 모드: send_keys 타이핑으로 입력")
+            logger.info("⌨️ Headless 모드: send_keys 타이핑으로 입력")
             actions = ActionChains(driver)
             actions.move_to_element(code_area).click()
 
@@ -134,7 +140,7 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
                 actions.pause(0.2)
             actions.perform()
         else:
-            print("🖥️ 일반 모드: JS로 CodeMirror + textarea 세팅")
+            logger.info("🖥️ 일반 모드: JS로 CodeMirror + textarea 세팅")
             driver.execute_script("""
                 const editor = document.querySelector('.CodeMirror').CodeMirror;
                 editor.setValue(arguments[0]);
@@ -156,7 +162,7 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
         value = driver.execute_script("""
             return document.querySelector('.ReactCodemirror textarea')?.value;
         """)
-        print(f"📦 본문 textarea 값: {value}")
+        logger.info(f"📦 본문 textarea 값: {value}")
 
         # 14. 임시저장 버튼 클릭
         save_draft_button = WebDriverWait(driver, 10).until(
