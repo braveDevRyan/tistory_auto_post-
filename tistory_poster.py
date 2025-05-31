@@ -12,8 +12,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 
-def post_to_tistory(username, password, blog_name, title_text, content_text):
 
+def post_to_tistory(username, password, blog_name, title_text, content_text):
     # 드라이버 실행
     options = webdriver.ChromeOptions()
 
@@ -22,12 +22,12 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")
     options.add_argument("--window-size=1920,1080")
+    options.add_argument("--start-maximized")  # <<< 이거도 추가
     options.add_argument(
         "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36")
 
     service = Service("/usr/local/bin/chromedriver-linux64/chromedriver")
     driver = webdriver.Chrome(service=service, options=options)
-
 
     try:
         # 1. 티스토리 로그인 페이지 접속
@@ -60,19 +60,19 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
         time.sleep(5)
 
         # 4. 글관리 페이지로 이동
-        post_list_url = f"https://{blog_name}.tistory.com/manage/posts/post/"
+        post_list_url = f"https://{blog_name}.tistory.com/manage/post"
         driver.get(post_list_url)
         time.sleep(2)
 
-        # 6. 글쓰기 버튼 클릭
-        write_button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, "link_write"))
-        )
-        write_button.click()
-        time.sleep(2)
+        # # 6. 글쓰기 버튼 클릭
+        # write_button = WebDriverWait(driver, 10).until(
+        #     EC.element_to_be_clickable((By.CLASS_NAME, "link_write"))
+        # )
+        # write_button.click()
+        # time.sleep(2)
 
         # 제목 입력 후, 첫 alert 처리 (임시저장 이어쓰기 여부)
-        accept_if_alert_present(driver, action="dismiss")         # 취소(dismiss)할 경우
+        accept_if_alert_present("제목",driver, action="dismiss")  # 취소(dismiss)할 경우
         time.sleep(2)
 
         # 7. 제목 입력
@@ -81,8 +81,6 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
         )
         title_input.clear()
         title_input.send_keys(title_text)
-
-
 
         # 8. HTML 모드로 전환
         mode_button = WebDriverWait(driver, 10).until(
@@ -97,9 +95,8 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
         html_mode_option.click()
 
         # 9. 알림 팝업(HTML모드 경고) 확인
-        accept_if_alert_present(driver, action="accept")        # 확인(accept)할 경우
+        accept_if_alert_present("내용", driver, action="accept")  # 확인(accept)할 경우
         time.sleep(1)
-
 
         # 10. CodeMirror HTML 입력창 클릭 후 입력
         fixed_text = content_text
@@ -126,7 +123,6 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
             """, fixed_text)
 
         time.sleep(3)
-
 
         # 11. 임시저장 버튼 클릭
         save_draft_button = WebDriverWait(driver, 10).until(
@@ -157,7 +153,7 @@ def limit_indentation_for_send(text: str, max_indent=4):
 
 
 # 🔐 alert 처리 함수
-def accept_if_alert_present(driver, action="accept", timeout=5):
+def accept_if_alert_present(type, driver, action="accept", timeout=5):
     """
     Tistory alert가 뜨면 '확인' 또는 '취소' 중 하나를 선택하여 처리함.
     :param driver: Selenium WebDriver
@@ -180,10 +176,4 @@ def accept_if_alert_present(driver, action="accept", timeout=5):
         time.sleep(1)
 
     except Exception as e:
-        print("ℹ️ Alert 없음 또는 이미 닫힘:", e)
-
-
-    except Exception as e:
-        print("ℹ️ Alert 없음 또는 이미 닫힘:", e)
-
-
+        print("ℹ️"+ type+ "Alert 없음 또는 이미 닫힘:", e)
