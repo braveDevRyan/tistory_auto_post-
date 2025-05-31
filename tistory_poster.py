@@ -69,7 +69,6 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
         driver.get(post_list_url)
         time.sleep(2)
 
-        driver.get("https://tistory.com/editor")  # 여긴 네가 열려는 주소
         WebDriverWait(driver, 30).until(
             lambda driver: driver.execute_script('return document.readyState') == 'complete'
         )
