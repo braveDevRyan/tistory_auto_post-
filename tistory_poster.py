@@ -118,11 +118,11 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
         code_area.click()
         time.sleep(1)
 
-        # 12. Headless 여부 체크
+        # 11. Headless 여부 체크
         is_headless = driver.execute_script("return navigator.webdriver")
         print(f"🧐 Headless Mode: {is_headless}")
 
-        # 13. 분기
+        # 12. 분기
         if is_headless:
             print("⌨️ Headless 모드: send_keys 타이핑으로 입력")
             actions = ActionChains(driver)
@@ -152,7 +152,13 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
 
         time.sleep(3)
 
-        # 11. 임시저장 버튼 클릭
+        # 13. textarea 현재 값 확인 로그
+        value = driver.execute_script("""
+            return document.querySelector('.ReactCodemirror textarea')?.value;
+        """)
+        print(f"📦 본문 textarea 값: {value}")
+
+        # 14. 임시저장 버튼 클릭
         save_draft_button = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, ".btn.btn-draft .action"))
         )
