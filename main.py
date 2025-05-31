@@ -1,5 +1,5 @@
 import os
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_file
 from tistory_poster import post_to_tistory
 
 app = Flask(__name__)
@@ -23,6 +23,16 @@ def post_tistory():
         print(f"Error occurred: {e}")  # ⭐️⭐️⭐️ 추가!
 
         return jsonify({"status":"error","message":str(e)}), 500
+
+# ⭐️⭐️⭐️ 새로 추가하는 부분
+@app.route("/screenshot", methods=["GET"])
+def screenshot():
+    screenshot_path = "/app/screenshot.png"
+    if os.path.exists(screenshot_path):
+        return send_file(screenshot_path, mimetype='image/png')
+    else:
+        return jsonify({"status": "error", "message": "스크린샷 파일이 없습니다."}), 404
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)
