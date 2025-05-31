@@ -27,7 +27,7 @@ def post_tistory():
 
 
 
-    data = request.get_json()
+    #data = request.get_json()
     if not data or "title" not in data or "content" not in data:
         return jsonify({"status":"error","message":"title과 content를 모두 보내주세요."}), 400
 
