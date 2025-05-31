@@ -78,9 +78,9 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
         # write_button.click()
         # time.sleep(2)
 
-        WebDriverWait(driver, 30).until(
-            lambda driver: driver.execute_script('return document.readyState') == 'complete'
-        )
+        # WebDriverWait(driver, 30).until(
+        #     lambda driver: driver.execute_script('return document.readyState') == 'complete'
+        # )
 
         # 제목 입력 후, 첫 alert 처리 (임시저장 이어쓰기 여부)
         accept_if_alert_present("제목",driver, action="dismiss")  # 취소(dismiss)할 경우
