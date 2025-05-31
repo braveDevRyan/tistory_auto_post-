@@ -129,12 +129,11 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
                 const editor = document.querySelector('.CodeMirror').CodeMirror;
                 editor.setValue(arguments[0]);
                 editor.refresh();
-                editor.focus();
-                editor.setCursor(editor.lineCount(), 0);
+                editor.save();  // 🔥 변경사항 저장 트리거
+                editor.getInputField().dispatchEvent(new Event('change', { bubbles: true })); // 🔥 change 이벤트 발생
             """, fixed_text)
 
         time.sleep(3)
-        driver.save_screenshot('screenshot.png')
 
         # 11. 임시저장 버튼 클릭
         save_draft_button = WebDriverWait(driver, 10).until(
@@ -147,7 +146,6 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
 
     except Exception as e:
         driver.save_screenshot('screenshot.png')
-
         print("❌ 오류 발생:", e)
         traceback.print_exc()  # 전체 에러 스택 출력
         return str(e)
