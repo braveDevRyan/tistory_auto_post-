@@ -27,6 +27,8 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
         "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
     )
     options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option('useAutomationExtension', False)
 
     service = Service("/usr/local/bin/chromedriver-linux64/chromedriver")
     driver = webdriver.Chrome(service=service, options=options)
@@ -70,6 +72,7 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
         WebDriverWait(driver, 30).until(
             lambda driver: driver.execute_script('return document.readyState') == 'complete'
         )
+        driver.save_screenshot('screenshot.png')
 
         # # 6. 글쓰기 버튼 클릭
         # write_button = WebDriverWait(driver, 10).until(
