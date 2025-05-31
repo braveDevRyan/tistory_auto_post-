@@ -3,6 +3,7 @@ import os
 from flask_cors import CORS
 from flask import Flask, jsonify, request, send_file
 from tistory_poster import post_to_tistory
+import json
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 32 * 1024 * 1024  # 32MB까지 허용
@@ -10,6 +11,21 @@ CORS(app)  # 🔥 모든 도메인 허용
 
 @app.route("/", methods=["POST"])
 def post_tistory():
+    # 콘솔에 출력할 기본 설정
+    logging.basicConfig(level=logging.INFO)
+
+    # 로거 가져오기
+    logger = logging.getLogger(__name__)
+
+    raw_body = request.get_data(as_text=True)
+    logger.info(f"🛬 Raw Body: {raw_body}")
+
+    data = json.loads(raw_body)  # JSON 파싱 직접 시도
+
+    # JSON이 잘 파싱됐는지 출력
+    logger.info(f"🛬 Parsed JSON: {data}")
+
+
 
     data = request.get_json()
     if not data or "title" not in data or "content" not in data:
