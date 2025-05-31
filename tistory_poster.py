@@ -22,8 +22,10 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")
     options.add_argument("--window-size=1920,1080")
+    options.add_argument("--start-maximized")         # <<< 이거도 추가
     options.add_argument(
         "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36")
+    
 
     service = Service("/usr/local/bin/chromedriver-linux64/chromedriver")
     driver = webdriver.Chrome(service=service, options=options)
