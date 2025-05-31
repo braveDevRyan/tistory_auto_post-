@@ -63,11 +63,11 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
         login_button = driver.find_element(By.CLASS_NAME, "submit")
         login_button.click()
         time.sleep(5)
-        driver.save_screenshot('screenshot.png')
 
         write_button = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, "a.link_tab"))
         )
+        driver.save_screenshot('screenshot.png')
 
         # # 4. 글관리 페이지로 이동
         # post_list_url = f"https://{blog_name}.tistory.com/manage/"
