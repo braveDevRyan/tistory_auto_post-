@@ -118,20 +118,13 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
         code_area.click()
         time.sleep(1)
 
-        # Headless 체크
-        if driver.execute_script("return navigator.webdriver"):
-            # 헤드리스 모드일 때: send_keys 사용
-            actions = ActionChains(driver)
-            actions.move_to_element(code_area).click().send_keys(fixed_text).perform()
-        else:
-            # 일반 모드일 때: 원래 코드 사용
-            driver.execute_script("""
-                const editor = document.querySelector('.CodeMirror').CodeMirror;
-                editor.setValue(arguments[0]);
-                editor.refresh();
-                editor.save();  // 🔥 변경사항 저장 트리거
-                editor.getInputField().dispatchEvent(new Event('change', { bubbles: true })); // 🔥 change 이벤트 발생
-            """, fixed_text)
+        driver.execute_script("""
+            const editor = document.querySelector('.CodeMirror').CodeMirror;
+            editor.setValue(arguments[0]);
+            editor.refresh();
+            editor.save();  // 🔥 반드시!
+            editor.getInputField().dispatchEvent(new Event('change', { bubbles: true })); // 🔥 반드시!
+        """, fixed_text)
 
         time.sleep(3)
 
