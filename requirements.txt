@@ -6,3 +6,4 @@ webdriver-manager
 functions-framework
 requests
 gunicorn
+flask-cors
