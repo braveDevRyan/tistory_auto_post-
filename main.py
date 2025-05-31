@@ -16,7 +16,7 @@ def post_tistory():
     logger = logging.getLogger(__name__)
 
     logger.info(f"🛬 Headers: {request.headers}")
-    logger.info(f"🛬 Raw Body: {request.data}")
+    logger.info(f"🛬 Raw Body: {request.get_data(as_text=True)}")
 
     data = request.get_json()
     if not data or "title" not in data or "content" not in data:
