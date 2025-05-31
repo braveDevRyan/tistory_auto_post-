@@ -125,8 +125,6 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
 
         # 11. Headless 여부 체크
         is_headless = "--headless" in options.arguments or "--headless=new" in options.arguments
-        logger.info(f"🧐 Headless Mode: {is_headless}")
-        logger.info(f"🧐 browserVersion : {driver.capabilities['browserVersion']}")
 
         # 12. 분기
         if is_headless:
@@ -162,7 +160,6 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
         value = driver.execute_script("""
             return document.querySelector('.ReactCodemirror textarea')?.value;
         """)
-        logger.info(f"📦 본문 textarea 값: {value}")
 
         # 14. 임시저장 버튼 클릭
         save_draft_button = WebDriverWait(driver, 10).until(
@@ -180,7 +177,6 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
         return str(e)
 
     finally:
-        driver.save_screenshot('screenshot.png')
         driver.quit()
 
 

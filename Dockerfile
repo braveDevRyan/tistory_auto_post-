@@ -49,4 +49,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 ENV PORT 8080
 
 # 앱 실행
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--timeout", "120", "main:app"]
+CMD ["gunicorn", "main:app", "--bind", "0.0.0.0:8080", "--limit-request-line", "8190", "--limit-request-field_size", "8190", "--timeout", "300"]
