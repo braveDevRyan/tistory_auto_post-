@@ -1,8 +1,11 @@
 import os
+
+import CORS as CORS
 from flask import Flask, jsonify, request, send_file
 from tistory_poster import post_to_tistory
 
 app = Flask(__name__)
+CORS(app)  # 🔥 모든 도메인 허용
 
 @app.route("/", methods=["POST"])
 def post_tistory():
