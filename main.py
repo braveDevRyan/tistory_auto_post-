@@ -13,12 +13,15 @@ def post_tistory():
         return jsonify({"status":"error","message":"title과 content를 모두 보내주세요."}), 400
 
     try:
+        title = data["title"].lstrip("\ufeff")
+        content = data["content"].lstrip("\ufeff")
+
         res = post_to_tistory(
             username=os.getenv("TISTORY_USERNAME"),
             password=os.getenv("TISTORY_PASSWORD"),
             blog_name=os.getenv("TISTORY_BLOG_NAME"),
-            title_text=data["title"],
-            content_text=data["content"]
+            title_text=title,
+            content_text=content
         )
         return jsonify({"status":"success","result":res})
     except Exception as e:
