@@ -85,7 +85,6 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
         # 제목 입력 후, 첫 alert 처리 (임시저장 이어쓰기 여부)
         accept_if_alert_present("제목",driver, action="dismiss")  # 취소(dismiss)할 경우
         time.sleep(2)
-        driver.save_screenshot('screenshot.png')
 
         # 7. 제목 입력
         title_input = WebDriverWait(driver, 30).until(
@@ -123,7 +122,7 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
         if driver.execute_script("return navigator.webdriver"):
             # 헤드리스 모드일 때: send_keys 사용
             actions = ActionChains(driver)
-            actions.send_keys(fixed_text).perform()
+            actions.move_to_element(code_area).click().send_keys(fixed_text).perform()
         else:
             # 일반 모드일 때: 원래 코드 사용
             driver.execute_script("""
@@ -135,6 +134,7 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
             """, fixed_text)
 
         time.sleep(3)
+        driver.save_screenshot('screenshot.png')
 
         # 11. 임시저장 버튼 클릭
         save_draft_button = WebDriverWait(driver, 10).until(
