@@ -124,7 +124,7 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
         time.sleep(1)
 
         # 11. Headless 여부 체크
-        is_headless = driver.headless
+        is_headless = "--headless" in options.arguments or "--headless=new" in options.arguments
         logger.info(f"🧐 Headless Mode: {is_headless}")
         logger.info(f"🧐 browserVersion : {driver.capabilities['browserVersion']}")
 
