@@ -60,16 +60,16 @@ def post_to_tistory(username, password, blog_name, title_text, content_text):
         time.sleep(5)
 
         # 4. 글관리 페이지로 이동
-        post_list_url = f"https://{blog_name}.tistory.com/manage/posts/post/"
+        post_list_url = f"https://{blog_name}.tistory.com/manage/post"
         driver.get(post_list_url)
         time.sleep(2)
 
-        # 6. 글쓰기 버튼 클릭
-        write_button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, "link_write"))
-        )
-        write_button.click()
-        time.sleep(2)
+        # # 6. 글쓰기 버튼 클릭
+        # write_button = WebDriverWait(driver, 10).until(
+        #     EC.element_to_be_clickable((By.CLASS_NAME, "link_write"))
+        # )
+        # write_button.click()
+        # time.sleep(2)
 
         # 제목 입력 후, 첫 alert 처리 (임시저장 이어쓰기 여부)
         accept_if_alert_present(driver, action="dismiss")         # 취소(dismiss)할 경우
