@@ -21,7 +21,7 @@ def post_tistory():
     logger.info(f"🛬 Raw Body: {raw_body}")
 
     # 🔥 컨트롤 문자 제거
-    raw_body_clean = re.sub(r'[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]', '', raw_body_escaped)
+    raw_body_clean = re.sub(r'[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]', '', raw_body)
 
     # 🔥 JSON 파싱
     data = json.loads(raw_body_clean)
