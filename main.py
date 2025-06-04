@@ -1,3 +1,4 @@
+import html
 import logging
 import os
 import re
@@ -20,20 +21,22 @@ def post_tistory():
     raw_body = request.get_data(as_text=True)
     logger.info(f"🛬 Raw Body: {raw_body}")
 
-    # 🔥 컨트롤 문자 제거
-    raw_body_clean = re.sub(r'[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]', '', raw_body)
+    # 컨트롤 문자 제거 (필요 시)
+    raw_body_clean = re.sub(r'[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]', '', raw_body)
 
-    # 🔥 JSON 파싱
-    data = json.loads(raw_body_clean)
-    logger.info(f"🛬 Parsed JSON: {data}")
+    # JSON 파싱
+    try:
+        data = json.loads(raw_body_clean)
+    except json.JSONDecodeError:
+        return jsonify({"status": "error", "message": "JSON 포맷 오류입니다."}), 400
 
     #data = request.get_json()
     if not data or "title" not in data or "content" not in data:
         return jsonify({"status":"error","message":"title과 content를 모두 보내주세요."}), 400
 
     try:
-        title = data["title"].lstrip("\ufeff")
-        content = data["content"].lstrip("\ufeff").replace('\n', '\\n')
+        title = html.unescape(data["title"].lstrip("\ufeff"))
+        content = html.unescape(data["content"].lstrip("\ufeff"))
 
         res = post_to_tistory(
             username=os.getenv("TISTORY_USERNAME"),
