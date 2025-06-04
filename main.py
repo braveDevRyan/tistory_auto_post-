@@ -20,8 +20,11 @@ def post_tistory():
     raw_body = request.get_data(as_text=True)
     logger.info(f"🛬 Raw Body: {raw_body}")
 
+    # 🔥 추가: 줄바꿈(\n) 이스케이프
+    raw_body_escaped = raw_body.replace('\n', '\\n')
+
     # 🔥 컨트롤 문자 제거
-    raw_body_clean = re.sub(r'[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]', '', raw_body)
+    raw_body_clean = re.sub(r'[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]', '', raw_body_escaped)
 
     # 🔥 JSON 파싱
     data = json.loads(raw_body_clean)
